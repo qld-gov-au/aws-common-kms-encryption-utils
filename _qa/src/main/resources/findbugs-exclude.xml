@@ -1,0 +1,29 @@
+<FindBugsFilter>
+    <Match>
+        <!-- We don't care that much about serialization -->
+        <!-- Replacing whitespace manually on every log invocation isn't feasible; maybe implement custom layout? -->
+        <Bug pattern="SE_NO_SERIALVERSIONID,CRLF_INJECTION_LOGS,IMC_IMMATURE_CLASS_NO_TOSTRING"/>
+    </Match>
+
+    <Match>
+        <!-- Entity classes just use the parent -->
+        <Bug pattern="EQ_DOESNT_OVERRIDE_EQUALS"/>
+    </Match>
+
+    <Match>
+        <!-- Too many false positives with this -->
+        <!-- typical failures are resulting from checking if not null then executing on it -->
+        <Bug pattern="PRMC_POSSIBLY_REDUNDANT_METHOD_CALLS"/>
+    </Match>
+
+    <Match>
+        <!-- Some fb-contrib filters just aren't production-grade -->
+        <Bug pattern="EXS_EXCEPTION_SOFTENING_NO_CONSTRAINTS,EXS_EXCEPTION_SOFTENING_NO_CHECKED,WEM_WEAK_EXCEPTION_MESSAGING,OPM_OVERLY_PERMISSIVE_METHOD"/>
+    </Match>
+
+    <!-- Workaround for Cobertura generated classes -->
+    <Match>
+        <Field name="__cobertura_counters"/>
+    </Match>
+
+</FindBugsFilter>
