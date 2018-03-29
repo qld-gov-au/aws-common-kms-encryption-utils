@@ -7,7 +7,7 @@
     <groupId>au.gov.qld.dsiti</groupId>
     <artifactId>oss-kms-encryption-utils</artifactId>
     <packaging>pom</packaging>
-    <version>1.4</version>
+    <version>1.5</version>
     <modules>
         <module>_qa</module>
         <module>aes-encryption-utils</module>
@@ -208,7 +208,7 @@
                         <execution>
                             <configuration>
                                 <printFailingErrors>true</printFailingErrors>
-                                <failOnViolation>false</failOnViolation>
+                                <failOnViolation>true</failOnViolation>
                                 <excludeFromFailureFile>${project.build.directory}/maven-shared-archive-resources/pmd-exclude.properties</excludeFromFailureFile>
                             </configuration>
                             <phase>prepare-package</phase>

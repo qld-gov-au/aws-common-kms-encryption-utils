@@ -46,7 +46,7 @@ import java.util.regex.Pattern;
  */
 public class PropertyKMSDecryptingContextInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
-    private static final Pattern decodePasswordPattern = Pattern.compile("kms\\((.*?)\\)");
+    private static final Pattern decodePasswordPattern = Pattern.compile("kms[(]([^)]*)[)]");
 
     private ConfigurationDecryptor configurationDecryptor;
 
@@ -94,7 +94,9 @@ public class PropertyKMSDecryptingContextInitializer implements ApplicationConte
      * @return override/decrypted value.
      */
     private String decryptPasswordsInString(String input) {
-        if (input == null) return null;
+        if (input == null) {
+            return null;
+        }
         StringBuffer output = new StringBuffer();
         Matcher matcher = decodePasswordPattern.matcher(input);
         while (matcher.find()) {
