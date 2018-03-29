@@ -19,12 +19,12 @@
         <snapshotRepository>
             <id>nexus</id>
             <name>Nexus</name>
-            <url>https://nexus.tools.services.qld.gov.au/nexus/content/repositories/snapshots/</url>
+            <url>https://nexus.tools.services.qld.gov.au/nexus/repository/snapshots/</url>
         </snapshotRepository>
         <repository>
             <id>nexus</id>
             <name>Nexus</name>
-            <url>https://nexus.tools.services.qld.gov.au/nexus/content/repositories/releases/</url>
+            <url>https://nexus.tools.services.qld.gov.au/nexus/repository/releases/</url>
         </repository>
     </distributionManagement>
 
