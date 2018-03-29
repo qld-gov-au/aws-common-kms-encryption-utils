@@ -6,12 +6,12 @@ import com.amazonaws.services.kms.model.DecryptResult;
 import com.amazonaws.util.Base64;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.*;
 
 /**
  * Created by jeremy on 30/8/17.
@@ -21,7 +21,7 @@ public class KmsConfigurationDecryptorTest {
 
     @Test
     public void decrypt() throws Exception {
-        AWSKMS mockKms = Mockito.mock(AWSKMS.class);
+        AWSKMS mockKms = mock(AWSKMS.class);
         KmsConfigurationDecryptor decryptor = new KmsConfigurationDecryptor(mockKms);
 
         String plainText = RandomStringUtils.random(50);
@@ -30,14 +30,14 @@ public class KmsConfigurationDecryptorTest {
         DecryptResult decryptResult = new DecryptResult();
         decryptResult.setKeyId("alias/Key");
         decryptResult.setPlaintext(ByteBuffer.wrap(plainText.getBytes(StandardCharsets.UTF_8)));
-        Mockito.when(mockKms.decrypt(Mockito.any(DecryptRequest.class))).thenReturn(decryptResult);
+        when(mockKms.decrypt(any(DecryptRequest.class))).thenReturn(decryptResult);
 
         DecryptRequest expectedDecryptRequest = new DecryptRequest();
         expectedDecryptRequest.setCiphertextBlob(ByteBuffer.wrap(plainText.getBytes(StandardCharsets.UTF_8)));
 
         String decrypted = decryptor.decrypt(base64Encoded);
         assertEquals(plainText, decrypted);
-        Mockito.verify(mockKms, Mockito.times(1)).decrypt(Mockito.eq(expectedDecryptRequest));
+        verify(mockKms, times(1)).decrypt(eq(expectedDecryptRequest));
     }
 
 }

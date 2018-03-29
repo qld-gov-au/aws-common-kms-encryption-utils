@@ -6,10 +6,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.crypto.Cipher;
+import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.GCMParameterSpec;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.Key;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
 /**
@@ -20,11 +22,11 @@ final class AESGCMEncryptor implements AESEncryptor {
     private static final String INVALID_INPUT_EXCEPTION_MESSAGE = "Invalid Input for Encryption";
     private static final String GENERIC_ENCRYPTION_EXCEPTION_MESSAGE = "Encryption Exception";
 
-    private static String ALGORITHM = "AES/GCM/NoPadding";
+    private static final String ALGORITHM = "AES/GCM/NoPadding";
 
-    private static int EXPECTED_IV_LENGTH = 12;
+    private static final int EXPECTED_IV_LENGTH = 12;
 
-    private static byte[] version = "G1".getBytes(StandardCharsets.UTF_8);
+    private static final byte[] version = "G1".getBytes(StandardCharsets.UTF_8);
 
     private static final Logger LOG = LoggerFactory.getLogger(AESGCMEncryptor.class);
 
@@ -34,12 +36,11 @@ final class AESGCMEncryptor implements AESEncryptor {
     public byte[] encrypt(final Key key, byte[] toEncrypt, byte[] nonSecretData) {
         try {
             byte[] iv = generateIV();
-            Cipher cipher = Cipher.getInstance(ALGORITHM);
+            Cipher cipher = getCipherInstance();
             cipher.init(Cipher.ENCRYPT_MODE, key, new GCMParameterSpec(16 * Byte.SIZE, iv));
             cipher.updateAAD(nonSecretData);
 
             byte[] cipherText = cipher.doFinal(toEncrypt);
-            assert cipherText.length == toEncrypt.length + 16;
 
             byte[] message = new byte[EXPECTED_IV_LENGTH + toEncrypt.length + 16];
 
@@ -64,7 +65,7 @@ final class AESGCMEncryptor implements AESEncryptor {
                 throw new EncryptionException(INVALID_INPUT_EXCEPTION_MESSAGE);
             }
 
-            Cipher cipher = Cipher.getInstance(ALGORITHM);
+            Cipher cipher = getCipherInstance();
             GCMParameterSpec params = new GCMParameterSpec(128, toDecrypt, 0, EXPECTED_IV_LENGTH);
             cipher.init(Cipher.DECRYPT_MODE, key, params);
             cipher.updateAAD(nonSecretData);
@@ -73,6 +74,10 @@ final class AESGCMEncryptor implements AESEncryptor {
             LOG.error("Unable to perform Decryption: " + gse.getMessage(), gse);
             throw new EncryptionException(GENERIC_ENCRYPTION_EXCEPTION_MESSAGE, gse);
         }
+    }
+
+    Cipher getCipherInstance() throws NoSuchPaddingException, NoSuchAlgorithmException {
+         return Cipher.getInstance(ALGORITHM);
     }
 
     private byte[] generateIV() {

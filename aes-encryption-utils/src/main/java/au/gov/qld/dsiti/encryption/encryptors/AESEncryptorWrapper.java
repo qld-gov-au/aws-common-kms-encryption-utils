@@ -28,7 +28,7 @@ public final class AESEncryptorWrapper {
      * Each encrypted value will be have a prefix added that identifies which AESEncryptor created the encrypted content.
      * The Version returned from the AESEncryptor will be padded to the following length.
      */
-    private static int versionPaddingLength = 4;
+    private static final int versionPaddingLength = 4;
 
     /**
      * Encrypts data
@@ -66,7 +66,7 @@ public final class AESEncryptorWrapper {
                 return aesEncryptor.decrypt(key, encryptedContent, nonSecretData);
             }
         }
-        LOG.error("Unsupported Encryption prefix: {}", new String(nonSecretData, StandardCharsets.UTF_8));
+        LOG.error("Unsupported Encryption prefix: {}", nonSecretData != null ? new String(nonSecretData, StandardCharsets.UTF_8) : "<null>");
         throw new EncryptionException("Unable to decrypt input");
     }
 
