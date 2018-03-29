@@ -16,6 +16,8 @@ import java.util.regex.Pattern;
 /**
  * This ContextInitializer will process any properties that require Decrypting with KMS.
  *
+ * (based off discussion on: https://stackoverflow.com/questions/31989883/process-spring-boot-externalized-property-values)
+ *
  * Property value must be something like:
  *
  * sensitive.password=kms(AQICAHhttNV4IbOS8nYKtNRgmeyS/LbslpW/5hmUTWq...)
