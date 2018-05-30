@@ -66,7 +66,7 @@ public final class AESEncryptorWrapper {
                 return aesEncryptor.decrypt(key, encryptedContent, nonSecretData);
             }
         }
-        LOG.error("Unsupported Encryption prefix: {}", nonSecretData != null ? new String(nonSecretData, StandardCharsets.UTF_8) : "<null>");
+        LOG.error("Unsupported Encryption prefix: {}", nonSecretData == null ? "<null>" : new String(nonSecretData, StandardCharsets.UTF_8));
         throw new EncryptionException("Unable to decrypt input");
     }
 

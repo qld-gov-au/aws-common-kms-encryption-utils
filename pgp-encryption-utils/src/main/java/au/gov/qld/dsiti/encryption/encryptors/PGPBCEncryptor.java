@@ -16,9 +16,9 @@ import static au.gov.qld.dsiti.encryption.encryptors.PGPUtils.*;
  */
 public class PGPBCEncryptor implements PGPEncryptor {
 
-    private PGPSecretKey secretKey;
-    private PGPPublicKey publicEncryptionKey;
-    private char[] secretKeyPassPhrase;
+    private final PGPSecretKey secretKey;
+    private final PGPPublicKey publicEncryptionKey;
+    private final char[] secretKeyPassPhrase;
 
 
     /**
