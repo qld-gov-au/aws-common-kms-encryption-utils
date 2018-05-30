@@ -7,24 +7,25 @@
     <groupId>au.gov.qld.dsiti</groupId>
     <artifactId>oss-kms-encryption-utils</artifactId>
     <packaging>pom</packaging>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.6-SNAPSHOT</version>
     <modules>
         <module>_qa</module>
         <module>aes-encryption-utils</module>
         <module>kms-environment-decryptor</module>
         <module>kms-environment-configuration</module>
+        <module>pgp-encryption-utils</module>
     </modules>
 
     <distributionManagement>
         <snapshotRepository>
             <id>nexus</id>
             <name>Nexus</name>
-            <url>https://nexus.tools.services.qld.gov.au/nexus/content/repositories/snapshots/</url>
+            <url>https://nexus.tools.services.qld.gov.au/nexus/repository/snapshots/</url>
         </snapshotRepository>
         <repository>
             <id>nexus</id>
             <name>Nexus</name>
-            <url>https://nexus.tools.services.qld.gov.au/nexus/content/repositories/releases/</url>
+            <url>https://nexus.tools.services.qld.gov.au/nexus/repository/releases/</url>
         </repository>
     </distributionManagement>
 
@@ -84,6 +85,23 @@
                 <version>${mockito.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>cglib</groupId>
+                <artifactId>cglib</artifactId>
+                <version>2.2.2</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.powermock</groupId>
+                <artifactId>powermock-module-junit4</artifactId>
+                <version>1.7.1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.powermock</groupId>
+                <artifactId>powermock-api-mockito2</artifactId>
+                <version>1.7.1</version>
+            </dependency>
+            
         </dependencies>
     </dependencyManagement>
 
@@ -108,6 +126,26 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib</artifactId>
+            <version>2.2.2</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-module-junit4</artifactId>
+            <version>1.7.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-api-mockito2</artifactId>
+            <version>1.7.1</version>
             <scope>test</scope>
         </dependency>
 
@@ -171,7 +209,7 @@
                         <execution>
                             <configuration>
                                 <printFailingErrors>true</printFailingErrors>
-                                <failOnViolation>false</failOnViolation>
+                                <failOnViolation>true</failOnViolation>
                                 <excludeFromFailureFile>${project.build.directory}/maven-shared-archive-resources/pmd-exclude.properties</excludeFromFailureFile>
                             </configuration>
                             <phase>prepare-package</phase>
