@@ -14,7 +14,7 @@ public class PGPBCEncryptorTest {
 
     private PGPBCEncryptor pgpbcEncryptor;
 
-    private String somePlainText = "123456789abcd";
+    private String somePlainText = "11111111";
 
     @Before
     public void setUp() throws Exception {
@@ -28,15 +28,14 @@ public class PGPBCEncryptorTest {
         byte[] encryptedMessageBytes = ("-----BEGIN PGP MESSAGE-----\n" +
                 "Version: BCPG v1.59\n" +
                 "\n" +
-                "hQEMA8aNf5XDd6SdAggAjFL8+CaNaC2/pCsZPlTKfH/B/alsuF5Vl2GQ0cKnhb2q\n" +
-                "kWJpb7VhwgcEY9fF3JhtIy0nqIWGoU6nku/i0v0eNnqb16TU3ZdixsLZr+kiPRa9\n" +
-                "zZ4J+vJQmf2mwsIiEJ2Q5BvkGiqwwea2NHNbLyqsn/XOxz9dL0uRk8wnT1Y83PuH\n" +
-                "5qZaWxZcBJSZEZRBXekgcgAZqU6eRLwIm1+2KuT0FNdZnZCltb3IDHKjGiFDTAvE\n" +
-                "yEF5BmL1n6SztGwnNX8hy7jVczjw2m5VtwQNN7axMv8UDDr1HPt2DObMcEiZy+xm\n" +
-                "WoiDS7I0ukfdK4adBpPFGttPmd5iZ4+MNNlBTCV5i8lHSYya5ncuHvT7Uk+OTaaf\n" +
-                "XGyH7tXyCB4Uhx8W7t042kZEOw/XlSzmR/dO8PMVKf/TEnWXghctqxBiBAshi8VP\n" +
-                "prUMiT7J0mU=\n" +
-                "=0NCh\n" +
+                "hQEMAzAbPOdBxmPvAgf/XPoU3m3ivPczI3aYKAtIPEnz6Y23Ssx1whNvc4/a+xbZ\n" +
+                "0AWXnqFEZSUzpJDJShlLXo8QHnFXXhTaCtR7wxx42mQWhj+kxavS3XDic88Gp/5m\n" +
+                "WsJ4q7W0oHbIgE7VgsiSG4rXK3l9jn6ueykLS5YLmVzRURRPSkb7KaYG/j2ODsl9\n" +
+                "7hVYvgEFu9I3JgcWJ97lFhU//HktPUPgy75QxnMd6BOE3tTqekqbrVNl50b7UDVJ\n" +
+                "14nplGX0irtiV3kaYAGY5n1ipsKQxiOa9+N6UBy4Ybxm8oFwRNILdkviElv6h415\n" +
+                "ER5gxRVu5C2pacjJX8wcdubYLpnZ8f7oz/rsG0HeQck9efW4tPYbnOnujne1r0wN\n" +
+                "2tcq+doSR/jOrHjtEjPBKiE7dgra1GxbdGFcNpK1DiBYDPpQndLNw41N4hdJ2g==\n" +
+                "=v8tQ\n" +
                 "-----END PGP MESSAGE-----").getBytes();
 
         byte[] decrypted = pgpbcEncryptor.decrypt(encryptedMessageBytes);

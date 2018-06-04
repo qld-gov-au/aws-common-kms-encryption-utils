@@ -70,7 +70,7 @@ public class PGPKeyGenerator {
 
         // Generate private key, dump to file.
         PGPSecretKeyRing skr = krgen.generateSecretKeyRing();
-        BufferedOutputStream secout = new BufferedOutputStream(new FileOutputStream(privateKeyFile));
+        ArmoredOutputStream secout = new ArmoredOutputStream(new FileOutputStream(privateKeyFile));
         skr.encode(secout);
         secout.close();
     }
