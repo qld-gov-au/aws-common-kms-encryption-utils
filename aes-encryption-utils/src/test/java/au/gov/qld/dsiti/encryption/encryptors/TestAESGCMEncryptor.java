@@ -9,24 +9,17 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.KeyGenerator;
-import javax.crypto.NoSuchPaddingException;
+import javax.crypto.*;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
-import java.security.ProviderException;
-import java.util.Arrays;
 import java.util.UUID;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -64,13 +57,9 @@ public class TestAESGCMEncryptor {
 
         AESGCMEncryptor aesgcmEncryptor = new AESGCMEncryptor();
 
-        //Cipher mockCipher = Mockito.mock(Cipher.class);
-        //Mockito.when(mockCipher.doFinal(Mockito.any(byte[].class))).thenThrow(new ProviderException("error"));
-
         AESGCMEncryptor spy = PowerMockito.spy(aesgcmEncryptor);
         PowerMockito.when(spy.getCipherInstance()).thenThrow(new NoSuchAlgorithmException("error"));
 
-        //byte[] plainTextBytes = RandomStringUtils.randomAscii(256).getBytes(StandardCharsets.UTF_8);
         byte[] nonSecretData = UUID.randomUUID().toString().getBytes(StandardCharsets.UTF_8);
         byte[] encrypted = spy.encrypt(null, null, nonSecretData);
     }
@@ -82,13 +71,9 @@ public class TestAESGCMEncryptor {
 
         AESGCMEncryptor aesgcmEncryptor = new AESGCMEncryptor();
 
-        //Cipher mockCipher = Mockito.mock(Cipher.class);
-        //Mockito.when(mockCipher.doFinal(Mockito.any(byte[].class))).thenThrow(new ProviderException("error"));
-
         AESGCMEncryptor spy = PowerMockito.spy(aesgcmEncryptor);
         PowerMockito.when(spy.getCipherInstance()).thenThrow(new NoSuchAlgorithmException("error"));
 
-        //byte[] plainTextBytes = RandomStringUtils.randomAscii(256).getBytes(StandardCharsets.UTF_8);
         byte[] nonSecretData = UUID.randomUUID().toString().getBytes(StandardCharsets.UTF_8);
         byte[] encrypted = spy.encrypt(testKey, null, nonSecretData);
     }
@@ -97,9 +82,6 @@ public class TestAESGCMEncryptor {
     public void testAESGCMEncryptor_DecryptGeneralEncryptionException_ThrowsException() throws BadPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, NoSuchPaddingException {
 
         AESGCMEncryptor aesgcmEncryptor = new AESGCMEncryptor();
-
-        //Cipher mockCipher = Mockito.mock(Cipher.class);
-        //Mockito.when(mockCipher.doFinal(Mockito.any(byte[].class))).thenThrow(new ProviderException("error"));
 
         AESGCMEncryptor spy = PowerMockito.spy(aesgcmEncryptor);
 
@@ -112,17 +94,12 @@ public class TestAESGCMEncryptor {
 
         PowerMockito.when(spy.getCipherInstance()).thenThrow(new NoSuchAlgorithmException("error"));
         byte[] decrypted = spy.decrypt(testKey, encrypted, nonSecretData);
-
-
     }
 
     @Test
     public void testAESGCMEncryptor_Decrypt_InvalidInput_GeneralEncryptionException_ThrowsException() throws BadPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, NoSuchPaddingException {
 
         AESGCMEncryptor aesgcmEncryptor = new AESGCMEncryptor();
-
-        //Cipher mockCipher = Mockito.mock(Cipher.class);
-        //Mockito.when(mockCipher.doFinal(Mockito.any(byte[].class))).thenThrow(new ProviderException("error"));
 
         AESGCMEncryptor spy = PowerMockito.spy(aesgcmEncryptor);
 
@@ -141,9 +118,6 @@ public class TestAESGCMEncryptor {
     public void testAESGCMEncryptor_Decrypt_InvalidNonSecretData_GeneralEncryptionException_ThrowsException() throws BadPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, NoSuchPaddingException {
 
         AESGCMEncryptor aesgcmEncryptor = new AESGCMEncryptor();
-
-        //Cipher mockCipher = Mockito.mock(Cipher.class);
-        //Mockito.when(mockCipher.doFinal(Mockito.any(byte[].class))).thenThrow(new ProviderException("error"));
 
         AESGCMEncryptor spy = PowerMockito.spy(aesgcmEncryptor);
 
