@@ -4,6 +4,8 @@ import au.gov.qld.dsiti.encryption.environment.ConfigurationDecryptor;
 import au.gov.qld.dsiti.encryption.environment.kms.KmsConfigurationDecryptor;
 import com.amazonaws.services.kms.AWSKMS;
 import com.amazonaws.services.kms.AWSKMSClientBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.*;
@@ -46,6 +48,8 @@ import java.util.regex.Pattern;
  */
 public class PropertyKMSDecryptingContextInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
+    private static final Logger LOG = LoggerFactory.getLogger(PropertyKMSDecryptingContextInitializer.class);
+
     private static final Pattern decodePasswordPattern = Pattern.compile("kms[(]([^)]*)[)]");
 
     private ConfigurationDecryptor configurationDecryptor;
@@ -56,7 +60,7 @@ public class PropertyKMSDecryptingContextInitializer implements ApplicationConte
     public void initialize(ConfigurableApplicationContext applicationContext) {
         ConfigurableEnvironment environment = applicationContext.getEnvironment();
         kmsRegion = environment.getProperty("kms.region");
-
+        LOG.info("Using KMS Region: {}", kmsRegion);
         for (PropertySource<?> propertySource : environment.getPropertySources()) {
             Map<String, Object> propertyOverrides = new LinkedHashMap<>();
             decryptKMSPasswords(environment, propertySource, propertyOverrides);
@@ -76,12 +80,16 @@ public class PropertyKMSDecryptingContextInitializer implements ApplicationConte
      * @param propertyOverrides  Map of all property overrides (i.e. decrypted property values)
      */
     private void decryptKMSPasswords(ConfigurableEnvironment environment, PropertySource<?> source, Map<String, Object> propertyOverrides) {
+        LOG.info("decryptKMSPasswords(source= {}", source.getName());
         if (source instanceof EnumerablePropertySource) {
             EnumerablePropertySource<?> enumerablePropertySource = (EnumerablePropertySource<?>) source;
             for (String key : enumerablePropertySource.getPropertyNames()) {
                 //use the environment.getProperty(key) as this will resolve the property if it's using an environment variable
                 String rawValue = environment.getProperty(key);
                 String decodedValue = decryptPasswordsInString(rawValue);
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("processed Property '{}'. Raw: '{}', Decoded: '{}'", key, rawValue, decodedValue);
+                }
                 propertyOverrides.put(key, decodedValue);
             }
         }
