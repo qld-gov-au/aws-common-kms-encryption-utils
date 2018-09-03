@@ -127,7 +127,7 @@ public class AESGCMPBKEncryptor implements AESPBKEncryptor {
             return decrypt(password, toDecrypt);
         } catch (DecoderException de) {
             LOG.warn("Received Invalid HEX Input: {}", de.getMessage());
-           throw new EncryptionException(INVALID_DECRYPTION_INPUT_EXCEPTION_MESSAGE);
+           throw new EncryptionException(INVALID_DECRYPTION_INPUT_EXCEPTION_MESSAGE, de);
         }
     }
 
