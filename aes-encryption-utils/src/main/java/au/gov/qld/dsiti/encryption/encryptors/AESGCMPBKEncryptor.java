@@ -2,7 +2,6 @@ package au.gov.qld.dsiti.encryption.encryptors;
 
 import au.gov.qld.dsiti.encryption.exceptions.EncryptionException;
 import org.apache.commons.codec.DecoderException;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.codec.binary.Hex;
 import org.slf4j.Logger;
@@ -13,6 +12,7 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
+import java.nio.ByteBuffer;
 import java.security.GeneralSecurityException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -47,20 +47,22 @@ public class AESGCMPBKEncryptor implements AESPBKEncryptor {
 
     @Override
     public byte[] encrypt(final char[] password, byte[] toEncrypt) {
+        byte[] iv = null;
+        byte[] salt = null;
+        byte[] encrypted = null;
         try {
-            byte[] salt = generateSalt();
-            byte[] iv = generateIV();
+            salt = generateSalt();
+            iv = generateIV();
 
             // Compute the hash of the provided password, using the salt, iteration count, and hash length
             byte[] key = pbkdf2(password, salt, PBKDF2_ITERATIONS, HASH_LENGTH_BYTES);
             SecretKeySpec secretKey = new SecretKeySpec(key, ENCRYPTION_ALGORITHM_NAME);
 
             Cipher cipher = Cipher.getInstance(ALGORITHM);
-            GCMParameterSpec params = new GCMParameterSpec(TAG_LENGTH_BITS, iv);
-            cipher.init(Cipher.ENCRYPT_MODE, secretKey, params);
+            cipher.init(Cipher.ENCRYPT_MODE, secretKey, new GCMParameterSpec(TAG_LENGTH_BITS, iv));
 
             //use the cipher to determine the output size
-            byte[] encrypted = new byte[cipher.getOutputSize(toEncrypt.length)];
+            encrypted = new byte[cipher.getOutputSize(toEncrypt.length)];
             int updateSize = cipher.update(toEncrypt, 0, toEncrypt.length, encrypted, 0);
             cipher.doFinal(encrypted, updateSize);
 
@@ -68,36 +70,48 @@ public class AESGCMPBKEncryptor implements AESPBKEncryptor {
             byte[] tag = new byte[TAG_LENGTH_BYTES];
             byte[] text = new byte[encrypted.length - TAG_LENGTH_BYTES];
 
-            System.arraycopy(encrypted, encrypted.length - TAG_LENGTH_BYTES, tag, 0, TAG_LENGTH_BYTES);
-            System.arraycopy(encrypted, 0, text, 0, encrypted.length - TAG_LENGTH_BYTES);
-
-            byte[] message = new byte[SALT_LENGTH_BYTES + IV_LENGTH_BYTES + encrypted.length];
+            ByteBuffer textAndTag = ByteBuffer.wrap(encrypted);
+            textAndTag.get(text);
+            textAndTag.get(tag);
 
             //SALT + IV + TAG + TEXT
-            System.arraycopy(salt, 0, message, 0, SALT_LENGTH_BYTES);
-            System.arraycopy(iv, 0, message, SALT_LENGTH_BYTES, IV_LENGTH_BYTES);
-            System.arraycopy(tag, 0, message, SALT_LENGTH_BYTES + IV_LENGTH_BYTES, tag.length);
-            System.arraycopy(text, 0, message, SALT_LENGTH_BYTES + IV_LENGTH_BYTES + tag.length, text.length);
+            ByteBuffer byteBuffer = ByteBuffer.allocate(SALT_LENGTH_BYTES + IV_LENGTH_BYTES + encrypted.length);
+            byteBuffer.put(salt);
+            byteBuffer.put(iv);
+            byteBuffer.put(tag);
+            byteBuffer.put(text);
 
-            return message;
+            return byteBuffer.array();
         } catch(GeneralSecurityException gse) {
             LOG.error("Unable to perform Decryption: " + gse.getMessage(), gse);
             throw new EncryptionException(GENERIC_ENCRYPTION_EXCEPTION_MESSAGE, gse);
+        } finally {
+            wipe(iv);
+            wipe(salt);
+            wipe(encrypted);
         }
     }
 
     @Override
     public byte[] decrypt(final char[] password, byte[] toDecrypt) {
+        byte[] salt = new byte[SALT_LENGTH_BYTES];
+        byte[] iv = new byte[IV_LENGTH_BYTES];
+        byte[] tag = new byte[TAG_LENGTH_BYTES];
+        byte[] text = null;
         try {
             //The input to decrypt is made of the following components that need to be extract: SALT + IV + TAG + TEXT
-            byte[] salt = ArrayUtils.subarray(toDecrypt, 0, SALT_LENGTH_BYTES);
-            byte[] iv = ArrayUtils.subarray(toDecrypt, SALT_LENGTH_BYTES, SALT_LENGTH_BYTES + IV_LENGTH_BYTES);
-            byte[] tag = ArrayUtils.subarray(toDecrypt, SALT_LENGTH_BYTES + IV_LENGTH_BYTES, SALT_LENGTH_BYTES + IV_LENGTH_BYTES + TAG_LENGTH_BYTES);
-            byte[] text = ArrayUtils.subarray(toDecrypt, SALT_LENGTH_BYTES + IV_LENGTH_BYTES + TAG_LENGTH_BYTES, toDecrypt.length);
+            ByteBuffer byteBuffer = ByteBuffer.wrap(toDecrypt);
 
-            byte[] textAndTag = new byte[text.length + tag.length];
-            System.arraycopy(text, 0, textAndTag, 0, text.length);
-            System.arraycopy(tag, 0, textAndTag, text.length, tag.length);
+            byteBuffer.get(salt);
+            byteBuffer.get(iv);
+            byteBuffer.get(tag);
+
+            text = new byte[byteBuffer.remaining()];
+            byteBuffer.get(text);
+
+            ByteBuffer textAndTag = ByteBuffer.allocate(text.length + tag.length);
+            textAndTag.put(text);
+            textAndTag.put(tag);
 
             // Compute the hash of the provided password, using the same salt,
             // iteration count, and hash length
@@ -105,13 +119,16 @@ public class AESGCMPBKEncryptor implements AESPBKEncryptor {
             SecretKeySpec secretKey = new SecretKeySpec(key, ENCRYPTION_ALGORITHM_NAME);
 
             Cipher cipher = Cipher.getInstance(ALGORITHM);
-            GCMParameterSpec params = new GCMParameterSpec(TAG_LENGTH_BITS, iv);
-            cipher.init(Cipher.DECRYPT_MODE, secretKey, params);
-            return cipher.doFinal(textAndTag);
+            cipher.init(Cipher.DECRYPT_MODE, secretKey, new GCMParameterSpec(TAG_LENGTH_BITS, iv));
+            return cipher.doFinal(textAndTag.array());
 
         } catch(GeneralSecurityException gse) {
             LOG.error("Unable to perform Decryption: " + gse.getMessage(), gse);
             throw new EncryptionException(GENERIC_ENCRYPTION_EXCEPTION_MESSAGE, gse);
+        } finally {
+            wipe(iv);
+            wipe(salt);
+            wipe(text);
         }
     }
 
@@ -127,7 +144,7 @@ public class AESGCMPBKEncryptor implements AESPBKEncryptor {
             return decrypt(password, toDecrypt);
         } catch (DecoderException de) {
             LOG.warn("Received Invalid HEX Input: {}", de.getMessage());
-           throw new EncryptionException(INVALID_DECRYPTION_INPUT_EXCEPTION_MESSAGE, de);
+            throw new EncryptionException(INVALID_DECRYPTION_INPUT_EXCEPTION_MESSAGE, de);
         }
     }
 
@@ -187,5 +204,11 @@ public class AESGCMPBKEncryptor implements AESPBKEncryptor {
      */
     private static String toHex(byte[] array) {
         return Hex.encodeHexString(array);
+    }
+
+    private void wipe(byte[] buf) {
+        if (buf != null && buf.length > 0) {
+            secureRandom.nextBytes(buf);
+        }
     }
 }
