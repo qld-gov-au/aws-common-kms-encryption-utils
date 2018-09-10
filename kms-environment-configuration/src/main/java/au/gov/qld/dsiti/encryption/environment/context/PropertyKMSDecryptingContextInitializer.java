@@ -31,17 +31,17 @@ import java.util.regex.Pattern;
  * Usage in SpringBoot:
 
  public static void main(String[] args) {
-     LOG.info("Starting CIDM Neo application");
-     SpringApplication application=new SpringApplication(NeoApplication.class);
-     application.addInitializers(new PropertyKMSDecryptingContextInitializer());
-     application.run(args);
-     SpringApplication.run(NeoApplication.class, args);
+ LOG.info("Starting CIDM Neo application");
+ SpringApplication application=new SpringApplication(NeoApplication.class);
+ application.addInitializers(new PropertyKMSDecryptingContextInitializer());
+ application.run(args);
+ SpringApplication.run(NeoApplication.class, args);
  }
 
  @Override
  protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-     application.initializers(new PropertyKMSDecryptingContextInitializer());
-     return application.sources(NeoApplication.class);
+ application.initializers(new PropertyKMSDecryptingContextInitializer());
+ return application.sources(NeoApplication.class);
  }
 
  *
@@ -87,9 +87,7 @@ public class PropertyKMSDecryptingContextInitializer implements ApplicationConte
                 //use the environment.getProperty(key) as this will resolve the property if it's using an environment variable
                 String rawValue = environment.getProperty(key);
                 String decodedValue = decryptPasswordsInString(rawValue);
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("processed Property '{}'. Raw: '{}', Decoded: '{}'", key, rawValue, decodedValue);
-                }
+                LOG.debug("processed Property '{}'. Raw: '{}', Decoded: '{}'", key, rawValue, decodedValue);
                 propertyOverrides.put(key, decodedValue);
             }
         }

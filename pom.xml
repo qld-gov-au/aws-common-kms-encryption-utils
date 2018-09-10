@@ -7,7 +7,7 @@
     <groupId>au.gov.qld.dsiti</groupId>
     <artifactId>oss-kms-encryption-utils</artifactId>
     <packaging>pom</packaging>
-    <version>1.10</version>
+    <version>1.11</version>
     <modules>
         <module>_qa</module>
         <module>aes-encryption-utils</module>

@@ -17,15 +17,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.crypto.*;
-import javax.crypto.spec.GCMParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
-import java.security.GeneralSecurityException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -35,8 +31,6 @@ import static org.junit.Assert.assertTrue;
 @PrepareForTest({AESGCMEncryptor.class})
 @PowerMockIgnore({"org.apache.http.conn.ssl.*", "javax.net.ssl.*" , "javax.crypto.*"})
 public class TestAESGCMEncryptor {
-
-    private static final Logger LOG = LoggerFactory.getLogger(TestAESGCMEncryptor.class);
 
     private Key testKey;
 

@@ -24,6 +24,8 @@ import java.security.spec.InvalidKeySpecException;
  * https://servicesmadesimpler.govnet.qld.gov.au/bitbucket/projects/QGCIDM/repos/cidm-neo_frontend/browse/NeoLibraries/lib/decrypt.js
  * https://servicesmadesimpler.govnet.qld.gov.au/bitbucket/projects/QGCIDM/repos/auth0-tenant/browse/idm/rules/46-save-the-qid.js
  *
+ * IMPORTANT: If any of these values change the compatibility with the above code will be broken.
+ *
  */
 public class AESGCMPBKEncryptor implements AESPBKEncryptor {
 
