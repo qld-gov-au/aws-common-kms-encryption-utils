@@ -13,6 +13,8 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.crypto.*;
 import java.nio.charset.StandardCharsets;
@@ -29,8 +31,6 @@ import static org.junit.Assert.assertTrue;
 @PrepareForTest({AESGCMEncryptor.class})
 @PowerMockIgnore({"org.apache.http.conn.ssl.*", "javax.net.ssl.*" , "javax.crypto.*"})
 public class TestAESGCMEncryptor {
-
-
 
     private Key testKey;
 
@@ -131,6 +131,5 @@ public class TestAESGCMEncryptor {
         PowerMockito.when(spy.getCipherInstance()).thenThrow(new NoSuchAlgorithmException("error"));
         byte[] decrypted = spy.decrypt(testKey, ArrayUtils.subarray(encrypted, 0, 20), new byte[0]);
     }
-
 
 }
