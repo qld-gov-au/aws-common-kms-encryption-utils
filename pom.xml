@@ -41,7 +41,7 @@
         <selenium.version>2.53.1</selenium.version>
         <jetty.version>9.4.1.v20170120</jetty.version>
         <spring.version>4.3.6.RELEASE</spring.version>
-        <spring.boot.version>1.5.1.RELEASE</spring.boot.version>
+        <spring.boot.version>2.4.5</spring.boot.version>
 
         <commons.codec.version>1.8</commons.codec.version>
         <commons.lang3.version>3.4</commons.lang3.version>
