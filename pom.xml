@@ -36,7 +36,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
 
-        <aws.sdk.version>1.11.34</aws.sdk.version>
+        <aws.sdk.version>1.11.1010</aws.sdk.version>
 
         <findbugs-plugin.version>3.0.5</findbugs-plugin.version>
         <findbugs.version>3.0.1</findbugs.version>
@@ -44,7 +44,7 @@
         <commons.codec.version>1.8</commons.codec.version>
         <commons.lang3.version>3.12.0</commons.lang3.version>
 
-        <junit.version>4.12</junit.version>
+        <junit.version>4.13.2</junit.version>
         <mockito.version>2.1.0</mockito.version>
 
 
@@ -59,6 +59,12 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>2.12.3</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
@@ -88,7 +94,7 @@
             <dependency>
                 <groupId>org.bouncycastle</groupId>
                 <artifactId>bcprov-jdk15on</artifactId>
-                <version>1.59</version>
+                <version>1.68</version>
             </dependency>
             <dependency>
                 <groupId>org.bouncycastle</groupId>
@@ -136,7 +142,7 @@
             <dependency>
                 <groupId>cglib</groupId>
                 <artifactId>cglib</artifactId>
-                <version>2.2.2</version>
+                <version>3.3.0</version>
                 <scope>test</scope>
             </dependency>
 
@@ -161,7 +167,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-remote-resources-plugin</artifactId>
-                    <version>1.5</version>
+                    <version>1.7.0</version>
                     <executions>
                         <execution>
                             <id>process-remote-resources</id>
@@ -180,9 +186,9 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-pmd-plugin</artifactId>
-                    <version>3.7</version>
+                    <version>3.14.0</version>
                     <dependencies>
-                        <dependency><groupId>net.sourceforge.pmd</groupId><artifactId>pmd-core</artifactId><version>5.5.1</version></dependency>
+                        <dependency><groupId>net.sourceforge.pmd</groupId><artifactId>pmd-core</artifactId><version>6.34.0</version></dependency>
                         <dependency><groupId>net.sourceforge.pmd</groupId><artifactId>pmd-java</artifactId><version>6.34.0</version></dependency>
                     </dependencies>
                     <configuration>
@@ -227,19 +233,6 @@
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>findbugs-maven-plugin</artifactId>
                     <version>${findbugs-plugin.version}</version>
-<!--                    <dependencies>-->
-<!--                        <dependency><groupId>com.google.code.findbugs</groupId><artifactId>findbugs</artifactId><version>${findbugs.version}</version></dependency>-->
-
-<!--                        <dependency><groupId>commons-io</groupId><artifactId>commons-io</artifactId><version>2.5</version></dependency>-->
-<!--                        <dependency><groupId>hsqldb</groupId><artifactId>hsqldb</artifactId><version>1.8.0.10</version></dependency>-->
-<!--                        <dependency><groupId>junit</groupId><artifactId>junit</artifactId><version>4.12</version></dependency>-->
-<!--                        <dependency><groupId>org.eclipse.jetty</groupId><artifactId>jetty-webapp</artifactId><version>${jetty.version}</version></dependency>-->
-<!--                        <dependency><groupId>org.jsoup</groupId><artifactId>jsoup</artifactId><version>1.9.2</version></dependency>-->
-<!--                        <dependency><groupId>org.hamcrest</groupId><artifactId>hamcrest-all</artifactId><version>1.3</version></dependency>-->
-<!--                        <dependency><groupId>org.mockito</groupId><artifactId>mockito-core</artifactId><version>1.10.19</version></dependency>-->
-<!--                        <dependency><groupId>org.seleniumhq.selenium</groupId><artifactId>selenium-java</artifactId><version>${selenium.version}</version></dependency>-->
-<!--                        <dependency><groupId>org.springframework</groupId><artifactId>spring-test</artifactId><version>${spring.version}</version></dependency>-->
-<!--                    </dependencies>-->
                     <configuration>
                         <excludeFilterFile>${project.build.directory}/maven-shared-archive-resources/findbugs-exclude.xml</excludeFilterFile>
                         <effort>Max</effort>
@@ -248,8 +241,8 @@
                         <failOnError>false</failOnError>
                         <plugins>
                             <plugin><groupId>com.h3xstream.findsecbugs</groupId><artifactId>findsecbugs-plugin</artifactId><version>1.11.0</version></plugin>
-                            <plugin><groupId>com.mebigfatguy.fb-contrib</groupId><artifactId>fb-contrib</artifactId><version>6.6.2</version></plugin>
-                            <plugin><groupId>org.mutabilitydetector</groupId><artifactId>MutabilityDetector4FindBugs</artifactId><version>0.9.1</version></plugin>
+                            <plugin><groupId>com.mebigfatguy.fb-contrib</groupId><artifactId>fb-contrib</artifactId><version>7.4.7</version></plugin>
+                            <plugin><groupId>org.mutabilitydetector</groupId><artifactId>MutabilityDetector4FindBugs</artifactId><version>0.9.3</version></plugin>
                         </plugins>
                     </configuration>
                     <executions>
@@ -304,12 +297,12 @@
                 <plugin>
                     <groupId>org.owasp</groupId>
                     <artifactId>dependency-check-maven</artifactId>
-                    <version>2.1.0</version>
+                    <version>6.1.6</version>
                     <configuration>
                         <skipProvidedScope>true</skipProvidedScope>
                         <skipRuntimeScope>true</skipRuntimeScope>
                         <suppressionFiles>
-                            <suppressionFile>${project.build.directory}/maven-shared-archive-resources/dependency-suppression.xml</suppressionFile>
+                            <suppressionFile>_qa/src/main/resources/dependency-suppression.xml</suppressionFile>
                         </suppressionFiles>
                         <failBuildOnCVSS>8</failBuildOnCVSS>
                     </configuration>
@@ -351,7 +344,18 @@
         </pluginManagement>
         
         <plugins>
-
+            <plugin>
+                <groupId>org.owasp</groupId>
+                <artifactId>dependency-check-maven</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>aggregate</goal>
+                        </goals>
+                        <phase>verify</phase>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
