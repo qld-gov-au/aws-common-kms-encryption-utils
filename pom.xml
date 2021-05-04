@@ -296,7 +296,7 @@
                         <skipProvidedScope>true</skipProvidedScope>
                         <skipRuntimeScope>true</skipRuntimeScope>
                         <suppressionFiles>
-                            <suppressionFile>${project.build.directory}/maven-shared-archive-resources/dependency-suppression.xml</suppressionFile>
+                            <suppressionFile>_qa/src/main/resources/dependency-suppression.xml</suppressionFile>
                         </suppressionFiles>
                         <failBuildOnCVSS>8</failBuildOnCVSS>
                     </configuration>
@@ -338,7 +338,18 @@
         </pluginManagement>
         
         <plugins>
-
+            <plugin>
+                <groupId>org.owasp</groupId>
+                <artifactId>dependency-check-maven</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>aggregate</goal>
+                        </goals>
+                        <phase>verify</phase>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
