@@ -46,7 +46,7 @@
         <spring.boot.version>1.5.1.RELEASE</spring.boot.version>
 
         <commons.codec.version>1.8</commons.codec.version>
-        <commons.lang3.version>3.4</commons.lang3.version>
+        <commons.lang3.version>3.12.0</commons.lang3.version>
 
         <junit.version>4.12</junit.version>
         <mockito.version>2.1.0</mockito.version>
