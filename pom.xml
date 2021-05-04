@@ -38,7 +38,7 @@
 
         <aws.sdk.version>1.11.34</aws.sdk.version>
 
-        <findbugs-plugin.version>3.0.4</findbugs-plugin.version>
+        <findbugs-plugin.version>3.0.5</findbugs-plugin.version>
         <findbugs.version>3.0.1</findbugs.version>
 
         <commons.codec.version>1.8</commons.codec.version>
