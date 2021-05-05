@@ -48,11 +48,11 @@ public class PGPUtils {
             encList = (PGPEncryptedDataList) pgpF.nextObject();
         }
 
-        Iterator<PGPPublicKeyEncryptedData> itt = encList.getEncryptedDataObjects();
+        Iterator<PGPEncryptedData> itt = encList.getEncryptedDataObjects();
         PGPPrivateKey sKey = null;
         PGPPublicKeyEncryptedData encP = null;
         while (sKey == null && itt.hasNext()) {
-            encP = itt.next();
+            encP = (PGPPublicKeyEncryptedData) itt.next();
             sKey = secKey.extractPrivateKey(new BcPBESecretKeyDecryptorBuilder(new BcPGPDigestCalculatorProvider()).build(pass));
         }
         if (sKey == null) {
