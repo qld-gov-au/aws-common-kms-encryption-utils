@@ -5,7 +5,7 @@
     <groupId>au.gov.qld.dsiti</groupId>
     <artifactId>oss-kms-encryption-utils</artifactId>
     <packaging>pom</packaging>
-    <version>1.12</version>
+    <version>1.13-SNAPSHOT</version>
 
     <modules>
         <module>_qa</module>
@@ -19,7 +19,7 @@
         <url>https://github.com/qld-gov-au/aws-common-kms-encryption-utils</url>
         <connection>scm:git:https://github.com/qld-gov-au/aws-common-kms-encryption-utils.git</connection>
         <developerConnection>scm:git:https://github.com/qld-gov-au/aws-common-kms-encryption-utils.git</developerConnection>
-        <tag>oss-kms-encryption-utils-1.12</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <profiles>
