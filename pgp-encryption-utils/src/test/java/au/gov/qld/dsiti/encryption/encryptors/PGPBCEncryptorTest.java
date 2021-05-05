@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import java.nio.charset.StandardCharsets;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * This test uses the previously generated keys to encrypted and decrypt text.

@@ -9,12 +9,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-import org.powermock.api.mockito.PowerMockito;
+import org.mockito.Mockito;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.crypto.*;
 import java.nio.charset.StandardCharsets;
@@ -56,10 +54,8 @@ public class TestAESGCMEncryptor {
         expectedException.expectMessage(new IsEqual("Encryption Exception"));
 
         AESGCMEncryptor aesgcmEncryptor = new AESGCMEncryptor();
-
-        AESGCMEncryptor spy = PowerMockito.spy(aesgcmEncryptor);
-        PowerMockito.when(spy.getCipherInstance()).thenThrow(new NoSuchAlgorithmException("error"));
-
+        AESGCMEncryptor spy = Mockito.spy(aesgcmEncryptor);
+        Mockito.when(spy.getCipherInstance()).thenThrow(new NoSuchAlgorithmException("error"));
         byte[] nonSecretData = UUID.randomUUID().toString().getBytes(StandardCharsets.UTF_8);
         byte[] encrypted = spy.encrypt(null, null, nonSecretData);
     }
@@ -71,8 +67,8 @@ public class TestAESGCMEncryptor {
 
         AESGCMEncryptor aesgcmEncryptor = new AESGCMEncryptor();
 
-        AESGCMEncryptor spy = PowerMockito.spy(aesgcmEncryptor);
-        PowerMockito.when(spy.getCipherInstance()).thenThrow(new NoSuchAlgorithmException("error"));
+        AESGCMEncryptor spy = Mockito.spy(aesgcmEncryptor);
+        Mockito.when(spy.getCipherInstance()).thenThrow(new NoSuchAlgorithmException("error"));
 
         byte[] nonSecretData = UUID.randomUUID().toString().getBytes(StandardCharsets.UTF_8);
         byte[] encrypted = spy.encrypt(testKey, null, nonSecretData);
@@ -83,7 +79,7 @@ public class TestAESGCMEncryptor {
 
         AESGCMEncryptor aesgcmEncryptor = new AESGCMEncryptor();
 
-        AESGCMEncryptor spy = PowerMockito.spy(aesgcmEncryptor);
+        AESGCMEncryptor spy = Mockito.spy(aesgcmEncryptor);
 
         byte[] plainTextBytes = RandomStringUtils.randomAscii(256).getBytes(StandardCharsets.UTF_8);
         byte[] nonSecretData = UUID.randomUUID().toString().getBytes(StandardCharsets.UTF_8);
@@ -92,7 +88,7 @@ public class TestAESGCMEncryptor {
         expectedException.expect(EncryptionException.class);
         expectedException.expectMessage(new IsEqual("Encryption Exception"));
 
-        PowerMockito.when(spy.getCipherInstance()).thenThrow(new NoSuchAlgorithmException("error"));
+        Mockito.when(spy.getCipherInstance()).thenThrow(new NoSuchAlgorithmException("error"));
         byte[] decrypted = spy.decrypt(testKey, encrypted, nonSecretData);
     }
 
@@ -101,8 +97,7 @@ public class TestAESGCMEncryptor {
 
         AESGCMEncryptor aesgcmEncryptor = new AESGCMEncryptor();
 
-        AESGCMEncryptor spy = PowerMockito.spy(aesgcmEncryptor);
-
+        AESGCMEncryptor spy = Mockito.spy(aesgcmEncryptor);
         byte[] plainTextBytes = RandomStringUtils.randomAscii(256).getBytes(StandardCharsets.UTF_8);
         byte[] nonSecretData = UUID.randomUUID().toString().getBytes(StandardCharsets.UTF_8);
         byte[] encrypted = spy.encrypt(testKey, plainTextBytes, nonSecretData);
@@ -110,7 +105,7 @@ public class TestAESGCMEncryptor {
         expectedException.expect(EncryptionException.class);
         expectedException.expectMessage(new IsEqual("Invalid Input for Encryption"));
 
-        PowerMockito.when(spy.getCipherInstance()).thenThrow(new NoSuchAlgorithmException("error"));
+        Mockito.when(spy.getCipherInstance()).thenThrow(new NoSuchAlgorithmException("error"));
         byte[] decrypted = spy.decrypt(testKey, ArrayUtils.subarray(encrypted, 0, 20), nonSecretData);
     }
 
@@ -119,8 +114,7 @@ public class TestAESGCMEncryptor {
 
         AESGCMEncryptor aesgcmEncryptor = new AESGCMEncryptor();
 
-        AESGCMEncryptor spy = PowerMockito.spy(aesgcmEncryptor);
-
+        AESGCMEncryptor spy = Mockito.spy(aesgcmEncryptor);
         byte[] plainTextBytes = RandomStringUtils.randomAscii(256).getBytes(StandardCharsets.UTF_8);
         byte[] nonSecretData = UUID.randomUUID().toString().getBytes(StandardCharsets.UTF_8);
         byte[] encrypted = spy.encrypt(testKey, plainTextBytes, nonSecretData);
@@ -128,7 +122,7 @@ public class TestAESGCMEncryptor {
         expectedException.expect(EncryptionException.class);
         expectedException.expectMessage(new IsEqual("Invalid Input for Encryption"));
 
-        PowerMockito.when(spy.getCipherInstance()).thenThrow(new NoSuchAlgorithmException("error"));
+        Mockito.when(spy.getCipherInstance()).thenThrow(new NoSuchAlgorithmException("error"));
         byte[] decrypted = spy.decrypt(testKey, ArrayUtils.subarray(encrypted, 0, 20), new byte[0]);
     }
 
