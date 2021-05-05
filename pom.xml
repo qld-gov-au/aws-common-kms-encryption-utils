@@ -8,6 +8,7 @@
     <artifactId>oss-kms-encryption-utils</artifactId>
     <packaging>pom</packaging>
     <version>1.12-SNAPSHOT</version>
+
     <modules>
         <module>_qa</module>
         <module>aes-encryption-utils</module>
@@ -16,19 +17,36 @@
         <module>kms-environment-configuration</module>
     </modules>
 
-    <distributionManagement>
-        <snapshotRepository>
-            <id>nexus</id>
-            <name>Nexus</name>
-            <url>https://nexus.tools.services.qld.gov.au/nexus/repository/snapshots/</url>
-        </snapshotRepository>
-        <repository>
-            <id>nexus</id>
-            <name>Nexus</name>
-            <url>https://nexus.tools.services.qld.gov.au/nexus/repository/releases/</url>
-        </repository>
-    </distributionManagement>
+    <scm>
+        <url>https://github.com/qld-gov-au/aws-common-kms-encryption-utils</url>
+        <connection>scm:git:https://github.com/qld-gov-au/aws-common-kms-encryption-utils.git</connection>
+        <developerConnection>scm:git:https://github.com/qld-gov-au/aws-common-kms-encryption-utils.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
 
+    <profiles>
+        <profile>
+            <id>internalRepo</id>
+            <activation>
+                <property>
+                    <name>useInternalRepo</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>nexus</id>
+                    <name>Nexus</name>
+                    <url>https://nexus.tools.services.qld.gov.au/nexus/repository/snapshots/</url>
+                </snapshotRepository>
+                <repository>
+                    <id>nexus</id>
+                    <name>Nexus</name>
+                    <url>https://nexus.tools.services.qld.gov.au/nexus/repository/releases/</url>
+                </repository>
+            </distributionManagement>
+        </profile>
+    </profiles>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
