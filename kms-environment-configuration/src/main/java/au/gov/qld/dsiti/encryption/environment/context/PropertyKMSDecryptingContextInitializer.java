@@ -38,7 +38,7 @@ import java.util.regex.Pattern;
  SpringApplication.run(NeoApplication.class, args);
  }
 
- @Override
+ @ Override
  protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
  application.initializers(new PropertyKMSDecryptingContextInitializer());
  return application.sources(NeoApplication.class);
