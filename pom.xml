@@ -96,7 +96,7 @@
             <dependency>
                 <groupId>org.bouncycastle</groupId>
                 <artifactId>bcpg-jdk15on</artifactId>
-                <version>1.69</version><!--1.68-->
+                <version>1.70</version><!--1.68-->
             </dependency>
 
             <dependency>
